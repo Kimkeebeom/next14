@@ -262,7 +262,6 @@ const ScrollItem1: React.FC<Props> = ({ showStart, resetStart }) => {
                     : "0",
                   overflow: "hidden",
                   transition: "max-height 0.5s ease-in-out",
-                  padding: isOpen["tg_wrap-nday"] ? "10px" : "0",
                 }}
               >
                 <div className="tg_con">
@@ -305,7 +304,6 @@ const ScrollItem1: React.FC<Props> = ({ showStart, resetStart }) => {
                     : "0",
                   overflow: "hidden",
                   transition: "max-height 0.5s ease-in-out",
-                  padding: isOpen["tg_wrap-nday2"] ? "10px" : "0",
                 }}
             >
               <div className="tg_con2">
