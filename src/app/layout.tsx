@@ -15,7 +15,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       duration: 1000, // 애니메이션 지속 시간 (ms)
       offset: 120, // 스크롤 시작 시점 (px)
       once: false, // 애니메이션이 한 번만 실행되도록 설정
+      startEvent: "DOMContentLoaded", // 애니메이션 시작 이벤트
     });
+    console.log("Aos initialized");
   }, []);
 
   return (
