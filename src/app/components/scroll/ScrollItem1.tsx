@@ -16,6 +16,48 @@ const ScrollItem1: React.FC<Props> = ({ showStart, resetStart }) => {
   const [, setScrollVisible] = useState(false); // 스크롤 상태
   const [isOpen, setIsOpen] = useState<Record<string, boolean>>({});
   const contentRefs = useRef<Record<string, HTMLDivElement | null>>({}); // 콘텐츠의 실제 높이를 참조하기 위한 ref
+  const [countdown, setCountdown] = useState({ hours: 0, minutes: 0, seconds: 0 }); // 카운트다운 시간
+  const [currentStatus, setCurrentStatus] = useState<string>("upcoming"); // 상태: upcoming, active, closed
+
+  // 다음날 오전 9시 59분 59초 계산 함수
+  const calculateNextDayEnd = (): Date => {
+    const now = new Date();
+    return new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 9, 59, 59);
+  };
+
+  // 카운트다운 업데이트 함수
+  const updateCountdown = (endTime: Date) => {
+    const now = new Date();
+    const diff = Math.max(endTime.getTime() - now.getTime(), 0);
+
+    if (diff === 0) {
+      setCurrentStatus("closed");
+      return;
+    }
+
+    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((diff / (1000 * 60)) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
+
+    setCountdown({ hours, minutes, seconds });
+  };
+
+  useEffect(() => {
+    const endTime = calculateNextDayEnd();
+
+    // 초기 상태 결정
+    const now = new Date();
+    if (now.getTime() < endTime.getTime()) {
+      setCurrentStatus("active");
+    } else {
+      setCurrentStatus("closed");
+    }
+
+    // 카운트다운 업데이트
+    const interval = setInterval(() => updateCountdown(endTime), 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
       const handleScroll = () => {
@@ -409,7 +451,87 @@ const ScrollItem1: React.FC<Props> = ({ showStart, resetStart }) => {
           </div>
         </div>
       </S.Section01>
-      <S.Section02 id='section02'></S.Section02>
+      <S.Section02 id='section02' className="sc02 sc-bk" style={{position: "relative"}}>
+        <div className="sc02-clock-bg"></div>
+        <div className="sc02-head">
+          <p className="sc-head-nb">NO.2</p>
+          <h3 className="sc-head-text">24시간 특가</h3>
+          <p className="sc-sub-text">매일 다른 상품으로 찾아올게요! 매일 방문하고 CHECK!<br/>
+          <span style={{fontWeight: "600;"}}>매일 오전 10시 - 다음 날 오전 9시 59분까지!</span></p>
+          
+          {currentStatus === "active" && (
+            <div className="w1280 sc02-timer" style={{ marginTop: "30px" }}>
+              <div className="container">
+                <ul className="count-time">
+                  <li>
+                    <div id="c_hours" className="hours">
+                      {String(countdown.hours).padStart(2, "0")}
+                    </div>
+                    <p>HOURS</p>
+                  </li>
+                  <li className="time-colon">:</li>
+                  <li>
+                    <div id="c_mins" className="mins">
+                      {String(countdown.minutes).padStart(2, "0")}
+                    </div>
+                    <p>MINS</p>
+                  </li>
+                  <li className="time-colon">:</li>
+                  <li>
+                    <div id="c_sec" className="sec">
+                      {String(countdown.seconds).padStart(2, "0")}
+                    </div>
+                    <p>SEC</p>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          )}
+          {currentStatus === "closed" && (
+            <div className="sc02-closed">
+              <h3>CLOSED!</h3>
+            </div>
+          )}
+        </div>
+        <div className="sc02-flex aos-init aos-animate" style={{paddingTop:"70px"}} data-aos="fade-up" data-aos-duration="1000">
+            <div className="sc02-thum" style={{backgroundImage: "linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://img.nstationmall.com//contents/2024/NDAY202411-MAIN/1118.jpg')", backgroundSize:"cover"}}>
+              <h3 className="sc02-coming-text">COMING SOON</h3>
+            </div>
+            <div className="sc02-thum" style={{backgroundImage: "linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://img.nstationmall.com//contents/2024/NDAY202411-MAIN/1119.jpg')", backgroundSize:"cover"}}>
+              <h3 className="sc02-coming-text">COMING SOON</h3>
+            </div>
+            <div className="sc02-thum" style={{backgroundImage: "linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://img.nstationmall.com//contents/2024/NDAY202411-MAIN/1120.jpg')", backgroundSize:"cover"}}>
+              <h3 className="sc02-coming-text">COMING SOON</h3>
+            </div>
+        </div>
+          
+
+        <div className="sc02-flex aos-init" style={{paddingTop:"20px"}} data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
+          <div className="sc02-thum" style={{backgroundImage: "linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://img.nstationmall.com//contents/2024/NDAY202411-MAIN/1121.jpg')", backgroundSize:"cover"}}>
+            <h3 className="sc02-coming-text">COMING SOON</h3>
+          </div>
+          <div className="sc02-thum" style={{backgroundImage: "linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://img.nstationmall.com//contents/2024/NDAY202411-MAIN/1122.jpg')", backgroundSize:"cover"}}>
+            <h3 className="sc02-coming-text">COMING SOON</h3>
+          </div>
+          <div className="sc02-thum" style={{backgroundImage: "linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://img.nstationmall.com//contents/2024/NDAY202411-MAIN/1125.jpg')", backgroundSize:"cover"}}>
+            <h3 className="sc02-coming-text">COMING SOON</h3>
+          </div>
+        </div>
+
+        <div className="sc02-flex aos-init" style={{paddingTop:"20px"}} data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
+          <a href="/event/planning/761" style={{display:"block"}}>
+            <div className="sc02-open" style={{backgroundImage: "url('https://img.nstationmall.com//contents/2024/NDAY202411-MAIN/1126.jpg')", backgroundSize:"cover"}}>
+              <h3 className="sc02-coming-text">COMING SOON</h3>
+            </div>
+          </a>
+            <div className="sc02-thum" style={{backgroundImage: "linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),  url('https://img.nstationmall.com//contents/2024/NDAY202411-MAIN/1127.jpg')", backgroundSize:"cover"}}>
+            <h3 className="sc02-coming-text">COMING SOON</h3>
+            </div>
+            <div className="sc02-thum" style={{backgroundImage:"linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://img.nstationmall.com//contents/2024/NDAY202411-MAIN/1128.jpg')", backgroundSize:"cover;"}}>
+              <h3 className="sc02-coming-text">COMING SOON</h3>
+            </div>
+        </div>
+      </S.Section02>
       <S.Section03 id='section03'></S.Section03>
       <S.Section04 id='section04'></S.Section04>
       <S.Section05 id='section05'></S.Section05>

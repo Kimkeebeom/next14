@@ -44,6 +44,14 @@ const motion = keyframes`
   0% {margin-top: 0px;}
   100% {margin-top: 15px;}
 `
+const wobble_ver_right = keyframes`
+  0%, 100% {transform: translateY(0) rotate(0);transform-origin: 50% 50%;}
+  15% {transform: translateY(-30px) rotate(6deg);}
+  30% {transform: translateY(15px) rotate(-6deg);}
+  45% {transform: translateY(-15px) rotate(3.6deg);}
+  60% {transform: translateY(9px) rotate(-2.4deg);}
+  75% {transform: translateY(-6px) rotate(1.2deg);}
+`
 
 // 스타일 정의
 // export const Section = styled.section`
@@ -346,7 +354,7 @@ export const Section01 = styled.section`
     line-height: 1.63;
     text-align: left;
   }
-  .tg_con li::before, .tg_con2 li::before {
+  .tg_con li::before, .tg_con2 li::before, .tg_con3 li::before {
     content: "- ";
     position: absolute;
     left: 0;
@@ -582,7 +590,91 @@ export const Section01 = styled.section`
 
   }
 `
-export const Section02 = styled.section``
+export const Section02 = styled.section`
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+  padding: 180px 0;
+  background-color: #030303;
+  display: block;
+
+  .sc02-clock-bg {
+    width: 482px;
+    height: 482px;
+    margin: 0 auto;
+    background: url("/images/nationalGeographic/sc02-clock.png");
+    overflow: hidden;
+    background-size: cover;
+    animation: ${wobble_ver_right} 2s both ease-out infinite;
+  }
+  .sc02-head {
+    position: absolute;
+    top: 400px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    z-index: 2;
+  }
+  .sc-head-nb {
+    color: #9572B4;
+    font-size: 25px;
+    font-family: "Outfit", sans-serif;
+    font-style: normal;
+    font-weight: 300;
+    align-content: center;
+    opacity: 60%;
+    letter-spacing: 1px;
+  }
+  .sc-head-text {
+    color: #9572B4;
+    font-size: 55px;
+    font-family: 'Paperlogy-8ExtraBold';
+    font-weight: normal;
+    margin-top: 10px;
+  }
+  .sc-sub-text {
+    color: #9572B4;
+    font-size: 30px;
+    line-height: 45px;
+    letter-spacing: -0.5px;
+    font-family: "Pretendard", sans-serif;
+    font-style: normal;
+    font-weight: 300;
+    margin-top: 40px;
+  }
+  .count-time {
+    color: #CAAB81;
+    margin: 0 auto;
+    text-align: center;
+    display: flex;
+    width: 550px;
+    justify-content: center;
+  }
+  .count-time li .hours, .count-time li .mins, .count-time li .sec {
+    color: #CAAB81;
+    margin-top: 15px;
+    font-size: 80px;
+    font-family: "Outfit", sans-serif;
+    font-style: normal;
+    font-weight: 200;
+    width: 130px;
+  }
+  .count-time li p {
+    font-size: 18px;
+    line-height: 30px;
+    font-weight: 300;
+    font-family: "Outfit", sans-serif;
+    font-style: normal;
+  }
+  .count-time .time-colon {
+    font-size: 54px;
+    font-weight: 100;
+    font-family: "Outfit", sans-serif;
+    font-style: normal;
+    align-content: center;
+    padding-bottom: 20px;
+  } 
+`
 export const Section03 = styled.section``
 export const Section04 = styled.section``
 export const Section05 = styled.section``
