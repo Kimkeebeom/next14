@@ -5,6 +5,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import Aos from 'aos';
 import * as S from '@/app/styles/scroll/scrollStyles';
 import Image from 'next/image';
+import ProductList from './Rotatedproduct';
 
 interface Props {
 //   children: React.ReactNode;
@@ -12,12 +13,25 @@ interface Props {
   resetStart: number; // 사라지는 시작 스크롤 위치
 }
 
+// interface Product {
+//   id: number;
+//   name: string;
+//   image: string;
+//   releaseDate?: string; // 동적으로 추가
+//   price?: string;
+//   discount?: string;
+//   status?: { current: "open" | "closed" | "upcoming" }; // 상태를 객체로 정의
+// }
+
 const ScrollItem1: React.FC<Props> = ({ showStart, resetStart }) => {
   const [, setScrollVisible] = useState(false); // 스크롤 상태
   const [isOpen, setIsOpen] = useState<Record<string, boolean>>({});
   const contentRefs = useRef<Record<string, HTMLDivElement | null>>({}); // 콘텐츠의 실제 높이를 참조하기 위한 ref
   const [countdown, setCountdown] = useState({ hours: 0, minutes: 0, seconds: 0 }); // 카운트다운 시간
   const [currentStatus, setCurrentStatus] = useState<string>("upcoming"); // 상태: upcoming, active, closed
+  // const [products, setProducts] = useState<Product[]>([]);
+  // const [rotatedProducts, setRotatedProducts] = useState<Product[]>([]);
+  // const [currentTime, setCurrentTime] = useState<Date>(new Date());
 
   // 다음날 오전 9시 59분 59초 계산 함수
   const calculateNextDayEnd = (): Date => {
@@ -58,6 +72,77 @@ const ScrollItem1: React.FC<Props> = ({ showStart, resetStart }) => {
 
     return () => clearInterval(interval);
   }, []);
+
+  // JSON 데이터 로드
+  // useEffect(() => {
+  //   const fetchProducts = async () => {
+  //     const response = await fetch("/data/products.json"); // JSON 파일 경로
+  //     const data: Omit<Product, "releaseDate" | "status">[] = await response.json();
+
+  //     // 현재 날짜 기준 releaseDate 설정
+  //     const now = new Date();
+  //     const updatedProducts = data.map((product: Product, index: number) => {
+  //       const releaseDate = new Date(
+  //         now.getTime() + index * 24 * 60 * 60 * 1000
+  //       ); // 하루씩 증가
+  //       return { ...product, releaseDate: releaseDate.toISOString(), status:  { current: "upcoming" as const }};
+  //     });
+
+  //     setProducts(updatedProducts);
+  //   };
+
+  //   fetchProducts();
+  // }, []);
+
+   // 현재 시간 업데이트
+  //  useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     setCurrentTime(new Date());
+  //   }, 1000);
+
+  //   return () => clearInterval(interval);
+  // }, []);
+
+   // 상품 상태 업데이트 및 무한 순환 로직
+  //  useEffect(() => {
+  //   if (products.length === 0) return;
+
+  //   const updatedProducts = products.map((product) => {
+  //     const releaseDate = new Date(product.releaseDate || "");
+  //     const diff = currentTime.getTime() - releaseDate.getTime();
+
+  //     if (diff >= 0 && diff < 24 * 60 * 60 * 1000) {
+  //       // 현재 시간 내에 활성화 상태
+  //       return { ...product, status: { current: "open" } };
+  //     } else if (diff >= 24 * 60 * 60 * 1000) {
+  //       // 24시간 이후 종료 상태
+  //       return { ...product, status: { current: "closed" } };
+  //     } else {
+  //       // 아직 오픈 전
+  //       return { ...product, status: { current: "upcoming" } };
+  //     }
+  //   });
+
+  //   // 무한 순환: 마지막 상품이 closed 상태가 되면 새로운 releaseDate로 설정
+  //   const closedIndex = updatedProducts.findIndex(
+  //     (product) => product.status?.current === "closed"
+  //   );
+  //   if (closedIndex >= 0) {
+  //     const nextRotation = [...updatedProducts];
+  //     const [rotated] = nextRotation.splice(closedIndex, 1);
+  //     nextRotation.push({
+  //       ...rotated,
+  //       releaseDate: new Date(
+  //         currentTime.getTime() + products.length * 24 * 60 * 60 * 1000
+  //       ).toISOString(), // 새로운 날짜 설정
+  //       status: { current: "upcoming"  as const},
+  //     } as Product);
+  //     setRotatedProducts(nextRotation);
+  //   } else {
+  //     setRotatedProducts(updatedProducts);
+  //   }
+  // }, [currentTime, products]);
+
 
   useEffect(() => {
       const handleScroll = () => {
@@ -201,13 +286,6 @@ const ScrollItem1: React.FC<Props> = ({ showStart, resetStart }) => {
   
 
   return (
-   /*  <section>
-        <div className={styles.intro_bg}>
-            <div className={`${styles.intro_logo}`}>
-                <h1 className={`${styles.logo}`}>Logo</h1>
-            </div>
-        </div>
-    </section> */
     <>
       <section>
           <S.Intro>
@@ -493,43 +571,14 @@ const ScrollItem1: React.FC<Props> = ({ showStart, resetStart }) => {
             </div>
           )}
         </div>
-        <div className="sc02-flex aos-init aos-animate" style={{paddingTop:"70px"}} data-aos="fade-up" data-aos-duration="1000">
-            <div className="sc02-thum" style={{backgroundImage: "linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://img.nstationmall.com//contents/2024/NDAY202411-MAIN/1118.jpg')", backgroundSize:"cover"}}>
-              <h3 className="sc02-coming-text">COMING SOON</h3>
-            </div>
-            <div className="sc02-thum" style={{backgroundImage: "linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://img.nstationmall.com//contents/2024/NDAY202411-MAIN/1119.jpg')", backgroundSize:"cover"}}>
-              <h3 className="sc02-coming-text">COMING SOON</h3>
-            </div>
-            <div className="sc02-thum" style={{backgroundImage: "linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://img.nstationmall.com//contents/2024/NDAY202411-MAIN/1120.jpg')", backgroundSize:"cover"}}>
-              <h3 className="sc02-coming-text">COMING SOON</h3>
-            </div>
+        <div className="sc02-flex " style={{paddingTop:"70px"}} data-aos="fade-up" data-aos-duration="1000">
+          <ProductList startIndex={0} endIndex={3} />
         </div>
-          
-
-        <div className="sc02-flex aos-init" style={{paddingTop:"20px"}} data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
-          <div className="sc02-thum" style={{backgroundImage: "linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://img.nstationmall.com//contents/2024/NDAY202411-MAIN/1121.jpg')", backgroundSize:"cover"}}>
-            <h3 className="sc02-coming-text">COMING SOON</h3>
-          </div>
-          <div className="sc02-thum" style={{backgroundImage: "linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://img.nstationmall.com//contents/2024/NDAY202411-MAIN/1122.jpg')", backgroundSize:"cover"}}>
-            <h3 className="sc02-coming-text">COMING SOON</h3>
-          </div>
-          <div className="sc02-thum" style={{backgroundImage: "linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://img.nstationmall.com//contents/2024/NDAY202411-MAIN/1125.jpg')", backgroundSize:"cover"}}>
-            <h3 className="sc02-coming-text">COMING SOON</h3>
-          </div>
+        <div className="sc02-flex " style={{paddingTop:"20px"}} data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
+          <ProductList startIndex={3} endIndex={6} />
         </div>
-
-        <div className="sc02-flex aos-init" style={{paddingTop:"20px"}} data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
-          <a href="/event/planning/761" style={{display:"block"}}>
-            <div className="sc02-open" style={{backgroundImage: "url('https://img.nstationmall.com//contents/2024/NDAY202411-MAIN/1126.jpg')", backgroundSize:"cover"}}>
-              <h3 className="sc02-coming-text">COMING SOON</h3>
-            </div>
-          </a>
-            <div className="sc02-thum" style={{backgroundImage: "linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),  url('https://img.nstationmall.com//contents/2024/NDAY202411-MAIN/1127.jpg')", backgroundSize:"cover"}}>
-            <h3 className="sc02-coming-text">COMING SOON</h3>
-            </div>
-            <div className="sc02-thum" style={{backgroundImage:"linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://img.nstationmall.com//contents/2024/NDAY202411-MAIN/1128.jpg')", backgroundSize:"cover;"}}>
-              <h3 className="sc02-coming-text">COMING SOON</h3>
-            </div>
+        <div className="sc02-flex " style={{paddingTop:"20px"}} data-aos="fade-up" data-aos-duration="1000" data-aos-delay="600">
+          <ProductList startIndex={6} endIndex={9} />
         </div>
       </S.Section02>
       <S.Section03 id='section03'></S.Section03>

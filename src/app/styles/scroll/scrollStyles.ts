@@ -54,15 +54,6 @@ const wobble_ver_right = keyframes`
 `
 
 // 스타일 정의
-// export const Section = styled.section`
-//   height: 600px;
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   background-color: #f0f0f0;
-//   margin-bottom: 20px;
-//   border: 1px solid #ccc;
-// `;
 export const Intro = styled.div`
   background: url("/images/nationalGeographic/intro-bgg.jpg");
   position: relative;
@@ -674,6 +665,34 @@ export const Section02 = styled.section`
     align-content: center;
     padding-bottom: 20px;
   } 
+  .sc02-flex {
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+    width: 950px;
+    gap: 10px;
+    margin: 0 auto;
+  }
+  .sc02-thum {
+    width: 300px;
+    height: 350px;
+    position: relative;
+  }
+  .sc02-coming-text {
+    color: #CAAB81;
+    font-size: 25px;
+    font-family: "Outfit", sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    letter-spacing: -0.2px;
+    align-content: center;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    transform: translateX(-50%) translateY(-50%);
+    top: 50%;
+    left: 50%;
+}
 `
 export const Section03 = styled.section``
 export const Section04 = styled.section``

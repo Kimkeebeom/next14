@@ -1,0 +1,65 @@
+[
+    {
+      "id": 1,
+      "name": "듀공 후드 숏다운 점퍼",
+      "priceTagImg": "/images/nationalGeographic/1119-price.jpg",
+      "image": "/images/nationalGeographic/1118.jpg",
+      "url" : "https://www.nstationmall.com/goods/detail/14984"
+    },
+    {
+      "id": 2,
+      "name": "뽀글이 다운 숏 패딩",
+      "priceTagImg": "/images/nationalGeographic/1119-price.jpg",
+      "image": "/images/nationalGeographic/1119.jpg",
+      "url": "https://www.nstationmall.com/goods/detail/1855"
+    },
+    {
+      "id": 3,
+      "name": "파치백팩 LAVENDER",
+      "priceTagImg": "/images/nationalGeographic/1120-price.jpg",
+      "image": "/images/nationalGeographic/1120.jpg",
+      "url": ""
+    },
+    {
+      "id": 4,
+      "name": "세미 오버핏 플리스 풀집업",
+      "priceTagImg": "/images/nationalGeographic/1121-price.jpg",
+      "image": "/images/nationalGeographic/1121.jpg",
+      "url": "https://www.nstationmall.com/goods/detail/8494"
+    },
+    {
+      "id": 5,
+      "name": "",
+      "priceTagImg": "/images/nationalGeographic/1122-price.jpg",
+      "image": "/images/nationalGeographic/1122.jpg",
+      "url": ""
+    },
+    {
+      "id": 6,
+      "name": "",
+      "priceTagImg": "/images/nationalGeographic/1125-price.jpg",
+      "image": "/images/nationalGeographic/1125.jpg",
+      "url": ""
+    },
+    {
+      "id": 7,
+      "name": "",
+      "priceTagImg": "/images/nationalGeographic/1126-price.jpg",
+      "image": "/images/nationalGeographic/1126.jpg",
+      "url": ""
+    },
+    {
+      "id": 8,
+      "name": "",
+      "priceTagImg": "/images/nationalGeographic/1127-price.jpg",
+      "image": "/images/nationalGeographic/1127.jpg",
+      "url": ""
+    },
+    {
+      "id": 9,
+      "name": "",
+      "priceTagImg": "/images/nationalGeographic/1128-price.jpg",
+      "image": "/images/nationalGeographic/1128.jpg",
+      "url": ""
+    }
+  ]
