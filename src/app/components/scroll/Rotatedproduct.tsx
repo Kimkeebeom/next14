@@ -10,6 +10,7 @@ interface Product {
   releaseDate: string; // 항상 ISO 문자열
   status: "open" | "closed" | "upcoming";
   priceTagImg: string;
+  url: string;
 }
 
 interface ProductListProps {
@@ -102,7 +103,7 @@ const ProductList: React.FC<ProductListProps> = ({ startIndex, endIndex }) => {
             )}
           {product.status === "open" && (
             <>
-                <a onClick={() => {alert("clicked")}}>
+                <a href={product.url} target="_blank" rel="noopener noreferrer">
                     <div>
                     <img src={product.image} alt={product.name} className={styles.image} />
                         <h3 className={styles.text}>
