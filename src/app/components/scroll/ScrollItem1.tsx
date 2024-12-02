@@ -148,7 +148,7 @@ const ScrollItem1: React.FC<Props> = ({ showStart, resetStart }) => {
       const handleScroll = () => {
         const currentScroll =
           window.scrollY || document.documentElement.scrollTop;
-          console.log("currentScroll: ", currentScroll);
+          // console.log("currentScroll: ", currentScroll);
         
       if (currentScroll > showStart) {
         // showStart 이후에 나타남

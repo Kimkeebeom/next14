@@ -42,12 +42,15 @@ const ProductList: React.FC<ProductListProps> = ({ startIndex, endIndex }) => {
       const timeDiff = currentTime.getTime() - releaseDate.getTime();
 
       if (timeDiff >= 0 && timeDiff < 24 * 60 * 60 * 1000) {
+        console.log("open")
         // 활성 상태
         return { ...product, status: "open" };
       } else if (timeDiff >= 24 * 60 * 60 * 1000) {
+        console.log("closed")
         // 종료 상태
         return { ...product, status: "closed" };
       } else {
+        console.log("upcoming")
         // 대기 상태
         return { ...product, status: "upcoming" };
       }
@@ -58,15 +61,36 @@ const ProductList: React.FC<ProductListProps> = ({ startIndex, endIndex }) => {
   useEffect(() => {
     const fetchProducts = async () => {
       const loadedProducts = await loadProducts();
-      setProducts(loadedProducts);
-    };
+      
+      // 수정 1: 현재 시간 기준으로 상태 갱신
+      const current = new Date();
+      const updatedProducts = updateProductStatuses(loadedProducts, current);
 
+      // 수정 2: 로컬 스토리지에 저장된 상태 불러오기
+      const savedStatuses = JSON.parse(localStorage.getItem("productStatuses") || "{}");
+
+      const finalProducts = updatedProducts.map((product) => ({
+        ...product,
+        status: savedStatuses[product.id] || product.status,
+      }));
+
+      // 수정 3: 로컬 스토리지에 상태 저장
+      const productStatuses = finalProducts.reduce((acc, product) => {
+        acc[product.id] = product.status;
+        return acc;
+      }, {} as Record<number, string>);
+      localStorage.setItem("productStatuses", JSON.stringify(productStatuses));
+
+      setProducts(finalProducts);
+    };
     fetchProducts();
   }, []);
 
   // **현재 시간 갱신**
   useEffect(() => {
-    const interval = setInterval(() => setCurrentTime(new Date()), 1000);
+    const interval = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000 * 60); 
     return () => clearInterval(interval);
   }, []);
 
@@ -76,7 +100,7 @@ const ProductList: React.FC<ProductListProps> = ({ startIndex, endIndex }) => {
       const updatedProducts = updateProductStatuses(products, currentTime);
       setProducts(updatedProducts);
     }
-  }, [products, currentTime]);
+  }, [currentTime]);
 
   // **현재 섹션에 해당하는 상품 추출**
   const sectionProducts = products.slice(startIndex, endIndex);
@@ -105,14 +129,14 @@ const ProductList: React.FC<ProductListProps> = ({ startIndex, endIndex }) => {
             <>
                 <a href={product.url} target="_blank" rel="noopener noreferrer">
                     <div>
-                    <img src={product.image} alt={product.name} className={styles.image} />
+                    <img src={product.image} alt={product.name} className={styles.open} />
                         <h3 className={styles.text}>
                             {new Date(product.releaseDate).getMonth() + 1}.{new Date(product.releaseDate).getDate()}
                             ({new Date(product.releaseDate).toLocaleDateString("ko-KR", { weekday: "short" })}) 10:00
                         </h3>
                         <div className={styles.price}>
                             <img src={product.priceTagImg} />
-                    </div>
+                        </div>
                     </div>
                 </a>
             </>
