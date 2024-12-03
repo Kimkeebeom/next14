@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import ScrollItem from './ScrollItem';
+import ScrollItem from './items/ScrollItem';
 import styles from './scroll.module.css';
 
 const ScrollWrapper: React.FC = () => {

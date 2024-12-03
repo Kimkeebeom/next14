@@ -1,182 +1,22 @@
-"use client";
-
-import React, { useEffect, useRef, useState } from 'react';
-// import styles from '@/app/styles/scroll/scroll.module.css';
-import Aos from 'aos';
+import React, { useState, useRef, useEffect } from "react";
 import * as S from '@/app/styles/scroll/scrollStyles';
-import Image from 'next/image';
-import ProductList from './Rotatedproduct';
 
-interface Props {
-//   children: React.ReactNode;
-  showStart: number; // 나타나는 시작 스크롤 위치
-  resetStart: number; // 사라지는 시작 스크롤 위치
-}
-
-// interface Product {
-//   id: number;
-//   name: string;
-//   image: string;
-//   releaseDate?: string; // 동적으로 추가
-//   price?: string;
-//   discount?: string;
-//   status?: { current: "open" | "closed" | "upcoming" }; // 상태를 객체로 정의
+// interface Props {
+//   showStart: number;
+//   resetStart: number;
 // }
 
-const ScrollItem1: React.FC<Props> = ({ showStart, resetStart }) => {
-  const [, setScrollVisible] = useState(false); // 스크롤 상태
+const Section01: React.FC/* <Props> */ = ({ /* showStart, resetStart */ }) => {
   const [isOpen, setIsOpen] = useState<Record<string, boolean>>({});
-  const contentRefs = useRef<Record<string, HTMLDivElement | null>>({}); // 콘텐츠의 실제 높이를 참조하기 위한 ref
-  const [countdown, setCountdown] = useState({ hours: 0, minutes: 0, seconds: 0 }); // 카운트다운 시간
-  const [currentStatus, setCurrentStatus] = useState<string>("upcoming"); // 상태: upcoming, active, closed
-  // const [products, setProducts] = useState<Product[]>([]);
-  // const [rotatedProducts, setRotatedProducts] = useState<Product[]>([]);
-  // const [currentTime, setCurrentTime] = useState<Date>(new Date());
+  const contentRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
-  // 다음날 오전 9시 59분 59초 계산 함수
-  const calculateNextDayEnd = (): Date => {
-    const now = new Date();
-    return new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 9, 59, 59);
-  };
-
-  // 카운트다운 업데이트 함수
-  const updateCountdown = (endTime: Date) => {
-    const now = new Date();
-    const diff = Math.max(endTime.getTime() - now.getTime(), 0);
-
-    if (diff === 0) {
-      setCurrentStatus("closed");
-      return;
-    }
-
-    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-    const minutes = Math.floor((diff / (1000 * 60)) % 60);
-    const seconds = Math.floor((diff / 1000) % 60);
-
-    setCountdown({ hours, minutes, seconds });
-  };
-
-  useEffect(() => {
-    const endTime = calculateNextDayEnd();
-
-    // 초기 상태 결정
-    const now = new Date();
-    if (now.getTime() < endTime.getTime()) {
-      setCurrentStatus("active");
-    } else {
-      setCurrentStatus("closed");
-    }
-
-    // 카운트다운 업데이트
-    const interval = setInterval(() => updateCountdown(endTime), 1000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  // JSON 데이터 로드
-  // useEffect(() => {
-  //   const fetchProducts = async () => {
-  //     const response = await fetch("/data/products.json"); // JSON 파일 경로
-  //     const data: Omit<Product, "releaseDate" | "status">[] = await response.json();
-
-  //     // 현재 날짜 기준 releaseDate 설정
-  //     const now = new Date();
-  //     const updatedProducts = data.map((product: Product, index: number) => {
-  //       const releaseDate = new Date(
-  //         now.getTime() + index * 24 * 60 * 60 * 1000
-  //       ); // 하루씩 증가
-  //       return { ...product, releaseDate: releaseDate.toISOString(), status:  { current: "upcoming" as const }};
-  //     });
-
-  //     setProducts(updatedProducts);
-  //   };
-
-  //   fetchProducts();
-  // }, []);
-
-   // 현재 시간 업데이트
-  //  useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     setCurrentTime(new Date());
-  //   }, 1000);
-
-  //   return () => clearInterval(interval);
-  // }, []);
-
-   // 상품 상태 업데이트 및 무한 순환 로직
-  //  useEffect(() => {
-  //   if (products.length === 0) return;
-
-  //   const updatedProducts = products.map((product) => {
-  //     const releaseDate = new Date(product.releaseDate || "");
-  //     const diff = currentTime.getTime() - releaseDate.getTime();
-
-  //     if (diff >= 0 && diff < 24 * 60 * 60 * 1000) {
-  //       // 현재 시간 내에 활성화 상태
-  //       return { ...product, status: { current: "open" } };
-  //     } else if (diff >= 24 * 60 * 60 * 1000) {
-  //       // 24시간 이후 종료 상태
-  //       return { ...product, status: { current: "closed" } };
-  //     } else {
-  //       // 아직 오픈 전
-  //       return { ...product, status: { current: "upcoming" } };
-  //     }
-  //   });
-
-  //   // 무한 순환: 마지막 상품이 closed 상태가 되면 새로운 releaseDate로 설정
-  //   const closedIndex = updatedProducts.findIndex(
-  //     (product) => product.status?.current === "closed"
-  //   );
-  //   if (closedIndex >= 0) {
-  //     const nextRotation = [...updatedProducts];
-  //     const [rotated] = nextRotation.splice(closedIndex, 1);
-  //     nextRotation.push({
-  //       ...rotated,
-  //       releaseDate: new Date(
-  //         currentTime.getTime() + products.length * 24 * 60 * 60 * 1000
-  //       ).toISOString(), // 새로운 날짜 설정
-  //       status: { current: "upcoming"  as const},
-  //     } as Product);
-  //     setRotatedProducts(nextRotation);
-  //   } else {
-  //     setRotatedProducts(updatedProducts);
-  //   }
-  // }, [currentTime, products]);
-
-
-  useEffect(() => {
-      const handleScroll = () => {
-        const currentScroll =
-          window.scrollY || document.documentElement.scrollTop;
-          // console.log("currentScroll: ", currentScroll);
-        
-      if (currentScroll > showStart) {
-        // showStart 이후에 나타남
-        setScrollVisible(true);
-      }  
-      if (currentScroll < resetStart || currentScroll === 0) {
-        // resetStart 이전에 사라짐
-        setScrollVisible(false);
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    // AOS  강제 새로고침
-    Aos.refreshHard();
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, [showStart, resetStart]);
-
-  // 토글 함수
   const toggleContent = (id: string) => {
     setIsOpen((prevState) => ({
       ...prevState,
-      [id]: !prevState[id], // 클릭된 콘텐츠만 열고 닫기
+      [id]: !prevState[id],
     }));
-    console.log("높이: ",contentRefs.current?.scrollHeight);
   };
-  
+
   // 복권 긁기 함수
   useEffect(() => {
     const canvas = document.getElementById("scratchCanvas") as HTMLCanvasElement;
@@ -283,63 +123,9 @@ const ScrollItem1: React.FC<Props> = ({ showStart, resetStart }) => {
       // 쿠폰 발행 로직 추가
     }
   }, []);
-  
 
   return (
-    <>
-      <section>
-          <S.Intro>
-              <S.IntroLogo>
-                  <S.Logo data-aos="fade-down" data-aos-duration="1500">Logo</S.Logo>
-              </S.IntroLogo>
-              <S.IntroContentGroup>
-                <div data-aos="zoom-out-down" data-aos-duration="1500">
-                  <S.IntroLight>
-                    <S.introLight1>
-                      <Image src='/images/nationalGeographic/intro-light-1.png' alt={'star'} 
-                        width={77} height={69} data-aos="fade-down" data-aos-duration="1500" 
-                        data-aos-delay="300"
-                      />
-                    </S.introLight1>
-                    <S.introLight2>
-                      <Image src='/images/nationalGeographic/intro-light-2.png' alt={'star'} 
-                        width={77} height={70} data-aos="fade-down" data-aos-duration="1500" 
-                        data-aos-delay="600"
-                      />
-                    </S.introLight2>
-                  </S.IntroLight>
-                  <S.introSale data-aos="fade-up" data-aos-duration="1500">
-                    <h3 className='sale-per'>UP TO 71% OFF</h3>
-                    <p className='sale-date'>11.18 00:00 - 11.29 10:00</p>
-                    <div className='logo-flex' style={{display: "flex"}}>
-                      <S.ngLogo>
-                        <Image src={'/images/nationalGeographic/ng-logo.png'} alt={'brand-logo'} width={119} height={35}/>
-                      </S.ngLogo>
-                      <S.mgLogo>
-                        <Image src={'/images/nationalGeographic/mg-logo.png'} alt={'brand-logo'} width={121} height={31}/>
-                      </S.mgLogo>
-                      <S.brtLogo>
-                        <Image src={'/images/nationalGeographic/brt-logo.png'} alt={'brand-logo'} width={80} height={30.97}/>
-                      </S.brtLogo>
-                    </div>
-                  </S.introSale>
-                </div>
-              </S.IntroContentGroup>
-          </S.Intro>
-      </section>
-      <S.Section>
-        <div className='topmenu fix'>
-          <a href='#section01' className='flex-item'>특별 혜택</a>
-          <a href='#section02' className='flex-item'>24시간 특가</a>
-          <a href='#section03' className='flex-item'>추가 혜택</a>
-          <a href='#section04' className='flex-item'>엔프렌즈 스타일링</a>
-          <a href='#section05' className='flex-item'>이벤트</a>
-          <a href='#section06' className='flex-item'>할인 상품</a>
-          <a href='#section07' className='flex-item'>결제 혜택</a>
-          <a href='#section08' className='flex-item'>브랜드관</a>
-        </div>
-      </S.Section>
-      <S.Section01 id='section01'>
+    <S.Section01 id='section01'>
         <div className='sc01-bg'>
           <div className='sc-head'>
             <p className='sc01-head-nb'>NO.1</p>
@@ -511,7 +297,6 @@ const ScrollItem1: React.FC<Props> = ({ showStart, resetStart }) => {
                     : "0",
                   overflow: "hidden",
                   transition: "max-height 0.5s ease-in-out",
-                  // padding: isOpen["tg_wrap-nday3"] ? "10px" : "0",
                 }}
             >
               <div className="tg_con3">
@@ -529,67 +314,7 @@ const ScrollItem1: React.FC<Props> = ({ showStart, resetStart }) => {
           </div>
         </div>
       </S.Section01>
-      <S.Section02 id='section02' className="sc02 sc-bk" style={{position: "relative"}}>
-        <div className="sc02-clock-bg"></div>
-        <div className="sc02-head">
-          <p className="sc-head-nb">NO.2</p>
-          <h3 className="sc-head-text">24시간 특가</h3>
-          <p className="sc-sub-text">매일 다른 상품으로 찾아올게요! 매일 방문하고 CHECK!<br/>
-          <span style={{fontWeight: "600;"}}>매일 오전 10시 - 다음 날 오전 9시 59분까지!</span></p>
-          
-          {currentStatus === "active" && (
-            <div className="w1280 sc02-timer" style={{ marginTop: "30px" }}>
-              <div className="container">
-                <ul className="count-time">
-                  <li>
-                    <div id="c_hours" className="hours">
-                      {String(countdown.hours).padStart(2, "0")}
-                    </div>
-                    <p>HOURS</p>
-                  </li>
-                  <li className="time-colon">:</li>
-                  <li>
-                    <div id="c_mins" className="mins">
-                      {String(countdown.minutes).padStart(2, "0")}
-                    </div>
-                    <p>MINS</p>
-                  </li>
-                  <li className="time-colon">:</li>
-                  <li>
-                    <div id="c_sec" className="sec">
-                      {String(countdown.seconds).padStart(2, "0")}
-                    </div>
-                    <p>SEC</p>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          )}
-          {currentStatus === "closed" && (
-            <div className="sc02-closed">
-              <h3>CLOSED!</h3>
-            </div>
-          )}
-        </div>
-        <div className="sc02-flex " style={{paddingTop:"70px"}} data-aos="fade-up" data-aos-duration="1000">
-          <ProductList startIndex={0} endIndex={3} />
-        </div>
-        <div className="sc02-flex " style={{paddingTop:"20px"}} data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
-          <ProductList startIndex={3} endIndex={6} />
-        </div>
-        <div className="sc02-flex " style={{paddingTop:"20px"}} data-aos="fade-up" data-aos-duration="1000" data-aos-delay="600">
-          <ProductList startIndex={6} endIndex={9} />
-        </div>
-      </S.Section02>
-      <S.Section03 id='section03'></S.Section03>
-      <S.Section04 id='section04'></S.Section04>
-      <S.Section05 id='section05'></S.Section05>
-      <S.Section06 id='section06'></S.Section06>
-      <S.Section07 id='section07'></S.Section07>
-      <S.Section08 id='section08'></S.Section08>
-    </>
   );
 };
 
-export default ScrollItem1;
-
+export default Section01;
